@@ -16,7 +16,7 @@ module ChrnoResponder
   #
   class Responder < ActionController::Responder
     # Добавляем расширения
-    include ChrnoResponder::Behavior::AutoFlash
     include ChrnoResponder::Behavior::TranslateFlash
+    include ChrnoResponder::Behavior::AutoFlash
   end
 end

@@ -24,8 +24,8 @@ module ChrnoResponder
         if not get? and not request.xhr?
           # В зависимости от наличия ошибок, добавляем сообщение :error или :success
           has_errors? \
-            ? flash.alert  ||= :error \
-            : flash.notice ||= :success
+            ? flash.alert  ||= "#{controller.action_name}.error".to_sym \
+            : flash.notice ||= "#{controller.action_name}.success".to_sym
         end
 
         to_html_without_auto_flashing
