@@ -24,10 +24,10 @@ module ChrnoResponder
         if post? and params.include? :commit
           # Были ли ошибки?
           if has_errors?
-            render json: serialize_errors, status: :conflict
+            render json: serialize_errors, status: :conflict, content_type: "application/json"
           else
             # Ошибок нет, просто возвращаем 200 статус и сам ресурс
-            render json: resource.to_json, status: :ok
+            render json: resource.to_json, status: :ok, content_type: "application/json"
           end
         else
           to_js_without_remote_validation
