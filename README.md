@@ -1,9 +1,14 @@
 # Описание
 Расширенный responder для контроллеров Rails.
-Автоматически создаёт и переводит flash сообщения.
 
-Больше не нужно писать:
+Фичи:
 
-    if @entity.update_attributes param[ :entity ]
-      flash[ :notice ] = "success"
-    end
+  - Автоматически создаёт и переводит flash сообщения.
+
+    Больше нет необходимости каждый раз писать:
+
+        if @entity.update_attributes param[ :entity ]
+          flash[ :notice ] = "success"
+        end
+
+  - Позволяет удалённо валидировать форму на сервере.

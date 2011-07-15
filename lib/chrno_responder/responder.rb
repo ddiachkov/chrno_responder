@@ -7,8 +7,9 @@ module ChrnoResponder
   module Behavior
     extend ActiveSupport::Autoload
 
-    autoload :AutoFlash,      "chrno_responder/behavior/auto_flash"
-    autoload :TranslateFlash, "chrno_responder/behavior/translate_flash"
+    autoload :AutoFlash,        "chrno_responder/behavior/auto_flash"
+    autoload :TranslateFlash,   "chrno_responder/behavior/translate_flash"
+    autoload :RemoteValidation, "chrno_responder/behavior/remote_validation"
   end
 
   ##
@@ -18,5 +19,6 @@ module ChrnoResponder
     # Добавляем расширения
     include ChrnoResponder::Behavior::TranslateFlash
     include ChrnoResponder::Behavior::AutoFlash
+    include ChrnoResponder::Behavior::RemoteValidation
   end
 end

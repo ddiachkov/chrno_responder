@@ -11,7 +11,7 @@ module ChrnoResponder
     initializer "chrno_responder.initialize" do
       # Выставляем новый responder по умолчанию
       ActiveSupport.on_load( :after_initialize ) do
-        puts "--> load chrno_responder"
+        puts "--> load chrno_responder local"
         ActionController::Base.responder = ChrnoResponder::Responder
       end
     end
