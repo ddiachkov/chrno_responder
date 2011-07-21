@@ -12,29 +12,45 @@ module ChrnoResponder
 
       included do
         delegate :params, :to => :request
-        alias_method :to_js, :to_format unless method_defined? :to_js
-        alias_method_chain :to_js, :remote_validation
+
+        alias_method :to_json, :to_format unless method_defined? :to_json
+        alias_method_chain :to_json, :remote_validation
+
+        alias_method :to_html, :to_format unless method_defined? :to_html
+        alias_method_chain :to_html, :remote_validation
       end
 
-      ##
-      # Посылает JSON с ошибками (или в случае их отсутствия -- с самим ресурсом).
-      #
-      def to_js_with_remote_validation
-        # Проверяем, что действие пришло от формы
-        if post? and params.include? :commit
-          # Были ли ошибки?
-          if has_errors?
-            render json: serialize_errors, status: :conflict, content_type: "application/json"
-          else
-            # Ошибок нет, просто возвращаем 200 статус и сам ресурс
-            render json: resource.to_json, status: :ok, content_type: "application/json"
-          end
+      def to_json_with_remote_validation
+        if has_errors? and client_expect_validation?
+          send_errors_as_json!
         else
-          to_js_without_remote_validation
+          to_json_without_remote_validation
+        end
+      end
+
+      def to_html_with_remote_validation
+        if has_errors? and client_expect_validation?
+          send_errors_as_json!
+        else
+          to_html_without_remote_validation
         end
       end
 
       private
+
+      ##
+      # Клиент ожидает валидацию?
+      #
+      def client_expect_validation?
+        ( post? or put? ) and ( params[ :validate ] == "true" or request.headers[ "HTTP_REMOTE_VALIDATION" ] == "true" )
+      end
+
+      ##
+      # Посылает JSON с ошибками.
+      #
+      def send_errors_as_json!
+        render json: serialize_errors, status: :conflict, content_type: "application/json"
+      end
 
       ##
       # Трансформирует ошибки ресурса в JSON вида: { модель: { поле: [ список_ошибок ] }}
