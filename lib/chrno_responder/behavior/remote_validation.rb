@@ -15,24 +15,13 @@ module ChrnoResponder
 
         alias_method :to_json, :to_format unless method_defined? :to_json
         alias_method_chain :to_json, :remote_validation
-
-        alias_method :to_html, :to_format unless method_defined? :to_html
-        alias_method_chain :to_html, :remote_validation
       end
 
       def to_json_with_remote_validation
-        if has_errors? and client_expect_validation?
+        if has_errors? and client_expects_validation?
           send_errors_as_json!
         else
           to_json_without_remote_validation
-        end
-      end
-
-      def to_html_with_remote_validation
-        if has_errors? and client_expect_validation?
-          send_errors_as_json!
-        else
-          to_html_without_remote_validation
         end
       end
 
@@ -41,7 +30,7 @@ module ChrnoResponder
       ##
       # Клиент ожидает валидацию?
       #
-      def client_expect_validation?
+      def client_expects_validation?
         ( post? or put? ) and ( params[ :validate ] == "true" or request.headers[ "HTTP_REMOTE_VALIDATION" ] == "true" )
       end
 
